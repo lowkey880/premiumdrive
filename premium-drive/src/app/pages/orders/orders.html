@@ -1,0 +1,75 @@
+<div class="page-hero">
+  <h1>Мои <span class="gold">заявки</span></h1>
+  <p>История всех ваших тест-драйвов</p>
+</div>
+
+<div class="page">
+
+  @if (isLoading) {
+    <div class="loading-center">
+      <div class="spinner"></div>
+    </div>
+  } @else if (orders.length === 0) {
+    <div class="empty-state">
+      <div class="empty-state-icon">📋</div>
+      <h3>У вас пока нет заявок</h3>
+      <p>Запишитесь на тест-драйв вашего любимого автомобиля</p>
+      <a routerLink="/cars" class="btn btn-primary" style="margin-top:8px">Смотреть каталог</a>
+    </div>
+  } @else {
+    <div class="orders-stats">
+      <div class="stat-pill">Всего: <strong>{{ orders.length }}</strong></div>
+      <div class="stat-pill stat-new">Новых: <strong>{{ countByStatus('new') }}</strong></div>
+      <div class="stat-pill stat-pending">Ожидает: <strong>{{ countByStatus('pending') }}</strong></div>
+      <div class="stat-pill stat-confirmed">Подтверждено: <strong>{{ countByStatus('confirmed') }}</strong></div>
+      <div class="stat-pill stat-completed">Завершено: <strong>{{ countByStatus('completed') }}</strong></div>
+    </div>
+
+    <div class="orders-list">
+      @for (order of orders; track order.id) {
+        <div class="order-card" [class]="'order-card--' + order.status">
+          <div class="order-header">
+            <div class="order-title">
+              <span class="order-car">{{ order.car_name }}</span>
+              <span class="badge-status" [class]="'badge-' + order.status">
+                {{ statusLabel(order.status) }}
+              </span>
+            </div>
+            <span class="order-date">{{ formatDate(order.created_at) }}</span>
+          </div>
+
+          @if (order.full_name || order.phone || order.date) {
+            <div class="order-details">
+              @if (order.full_name) {
+                <span class="order-detail-item">👤 {{ order.full_name }}</span>
+              }
+              @if (order.phone) {
+                <span class="order-detail-item">📞 {{ order.phone }}</span>
+              }
+              @if (order.date) {
+                <span class="order-detail-item">📅 {{ order.date }}</span>
+              }
+            </div>
+          }
+
+          @if (order.comment) {
+            <p class="order-comment">{{ order.comment }}</p>
+          }
+
+          <div class="order-footer">
+            <span class="order-id"># {{ order.id }}</span>
+            @if (isCancellable(order)) {
+              <button
+                class="btn-cancel"
+                (click)="cancelOrder(order)"
+                [disabled]="cancellingId === order.id"
+              >
+                {{ cancellingId === order.id ? 'Отмена...' : '✕ Отменить заявку' }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

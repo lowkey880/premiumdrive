@@ -1,0 +1,58 @@
+<div class="login-page">
+  <div class="login-card">
+
+    <div class="login-logo">
+      Premium<span>Drive</span>
+    </div>
+    <h1 class="login-title">Вход в аккаунт</h1>
+    <p class="login-sub">Войдите, чтобы записаться на тест-драйв</p>
+
+    @if (sessionExpired) {
+      <div class="alert-warning">
+        ⚠️ Ваша сессия истекла. Пожалуйста, войдите снова.
+      </div>
+    }
+
+    <div class="form-group">
+      <label class="form-label">Имя пользователя</label>
+      <input
+        class="form-input"
+        [(ngModel)]="username"
+        placeholder="username"
+        type="text"
+        (keydown.enter)="login()"
+        autocomplete="username"
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Пароль</label>
+      <div class="password-wrap">
+        <input
+          class="form-input"
+          [(ngModel)]="password"
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="••••••••"
+          (keydown.enter)="login()"
+          autocomplete="current-password"
+        />
+        <button class="toggle-pw" (click)="togglePassword()" type="button">
+          {{ showPassword ? '🙈' : '👁️' }}
+        </button>
+      </div>
+    </div>
+
+    <button
+      class="btn btn-primary login-btn"
+      (click)="login()"
+      [disabled]="isLoading"
+    >
+      {{ isLoading ? 'Входим...' : 'Войти' }}
+    </button>
+
+    <p class="login-hint">
+      После входа вы вернётесь на предыдущую страницу.
+    </p>
+
+  </div>
+</div>

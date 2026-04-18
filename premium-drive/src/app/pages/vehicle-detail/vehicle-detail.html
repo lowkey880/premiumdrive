@@ -1,0 +1,167 @@
+@if (isLoading) {
+  <div class="loading-center" style="padding:120px 0">
+    <div class="spinner"></div>
+  </div>
+} @else if (vehicle) {
+
+  <!-- HERO -->
+  <div class="detail-hero">
+    <img [src]="vehicle.image || 'https://placehold.co/1200x500/1a1a1a/c9a84c?text=' + vehicle.brand"
+         [alt]="vehicle.name" class="hero-img" />
+    <div class="hero-gradient"></div>
+    <div class="hero-info">
+      <span class="hero-brand">{{ vehicle.brand }}</span>
+      <h1 class="hero-name">{{ vehicle.name }}</h1>
+      <span class="hero-price">{{ formatPrice(vehicle.price) }}</span>
+    </div>
+  </div>
+
+  <div class="page">
+
+    <!-- ACTIONS BAR -->
+    <div class="actions-bar">
+      @if (isLoggedIn) {
+        <button class="btn btn-primary" (click)="toggleOrderForm()">
+          {{ showOrderForm ? '✕ Закрыть форму' : '📋 Записаться на тест-драйв' }}
+        </button>
+      } @else {
+        <a routerLink="/login" class="btn btn-primary">🔐 Войдите для записи</a>
+      }
+      <button class="btn btn-secondary" [class.fav-active]="isFavorite" (click)="toggleFavorite()">
+        {{ isFavorite ? '♥ В избранном' : '♡ В избранное' }}
+      </button>
+      @if (isLoggedIn) {
+        <button class="btn btn-ghost" (click)="toggleReviewForm()">
+          {{ showReviewForm ? '✕ Отмена' : '✍️ Написать отзыв' }}
+        </button>
+      }
+    </div>
+
+    <!-- ORDER FORM — 4 [(ngModel)] поля -->
+    @if (showOrderForm) {
+      <div class="form-card">
+        <h3 class="form-card-title">Заявка на тест-драйв — {{ vehicle.name }}</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Ваше имя *</label>
+            <input class="form-input" [(ngModel)]="orderForm.fullName"
+                   placeholder="Арман Арманов" type="text" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Телефон *</label>
+            <input class="form-input" [(ngModel)]="orderForm.phone"
+                   placeholder="+7 (777) 000-00-00" type="tel" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Желаемая дата *</label>
+            <input class="form-input" [(ngModel)]="orderForm.date" type="date" />
+          </div>
+          <div class="form-group" style="grid-column:1/-1">
+            <label class="form-label">Комментарий</label>
+            <textarea class="form-textarea" [(ngModel)]="orderForm.comment"
+                      placeholder="Пожелания, вопросы по комплектации..."></textarea>
+          </div>
+        </div>
+        <button class="btn btn-primary" (click)="submitOrder()" [disabled]="orderSubmitting">
+          {{ orderSubmitting ? 'Отправка...' : 'Отправить заявку' }}
+        </button>
+      </div>
+    }
+
+    <!-- SPECS -->
+    <div class="specs-grid">
+      <div class="spec-card">
+        <div class="spec-label">Бренд</div>
+        <div class="spec-value">{{ vehicle.brand }}</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-label">Тип</div>
+        <div class="spec-value">{{ vehicle.type }}</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-label">Стоимость</div>
+        <div class="spec-value gold">{{ formatPrice(vehicle.price) }}</div>
+      </div>
+      @if (vehicle.year) {
+        <div class="spec-card">
+          <div class="spec-label">Год выпуска</div>
+          <div class="spec-value">{{ vehicle.year }}</div>
+        </div>
+      }
+      @if (vehicle.engine) {
+        <div class="spec-card">
+          <div class="spec-label">Двигатель</div>
+          <div class="spec-value">{{ vehicle.engine }}</div>
+        </div>
+      }
+      @if (vehicle.horsepower) {
+        <div class="spec-card">
+          <div class="spec-label">Мощность</div>
+          <div class="spec-value">{{ vehicle.horsepower }} л.с.</div>
+        </div>
+      }
+    </div>
+
+    @if (vehicle.description) {
+      <div class="description-block">
+        <h3>Описание</h3>
+        <p>{{ vehicle.description }}</p>
+      </div>
+    }
+
+    <div class="divider"></div>
+
+    <!-- REVIEWS -->
+    <div class="reviews-section">
+      <h2 class="section-title">Отзывы</h2>
+      <div class="gold-line"></div>
+
+      @if (isLoggedIn && showReviewForm) {
+        <div class="form-card">
+          <h3 class="form-card-title">Ваш отзыв о {{ vehicle.name }}</h3>
+          <div class="form-group">
+            <label class="form-label">Оценка *</label>
+            <div class="rating-selector">
+              @for (star of starRange; track star) {
+                <button (click)="setRating(star)" [class.selected]="reviewForm.rating >= star">★</button>
+              }
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Текст отзыва *</label>
+            <textarea class="form-textarea" [(ngModel)]="reviewForm.text"
+                      placeholder="Поделитесь впечатлениями от тест-драйва..."></textarea>
+          </div>
+          <button class="btn btn-primary" (click)="submitReview()" [disabled]="reviewSubmitting">
+            {{ reviewSubmitting ? 'Публикация...' : 'Опубликовать отзыв' }}
+          </button>
+        </div>
+      }
+
+      @if (reviews.length === 0) {
+        <div class="empty-state">
+          <div class="empty-state-icon">💬</div>
+          <h3>Отзывов пока нет</h3>
+          @if (isLoggedIn) {
+            <p>Станьте первым — нажмите «Написать отзыв»</p>
+          } @else {
+            <p><a routerLink="/login" class="gold-link">Войдите</a>, чтобы оставить отзыв</p>
+          }
+        </div>
+      } @else {
+        <div class="reviews-list">
+          @for (review of reviews; track review.id) {
+            <div class="review-card">
+              <div class="review-header">
+                <span class="review-stars">{{ ratingStars(review.rating) }}</span>
+                <span class="review-date">{{ review.created_at | slice:0:10 }}</span>
+              </div>
+              <p class="review-text">{{ review.text }}</p>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+  </div>
+}

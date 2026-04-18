@@ -1,0 +1,81 @@
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <p class="hero-eyebrow">Премиальный тест-драйв</p>
+    <h1 class="hero-title">Почувствуй мощь<br><span class="gold">лучших машин</span></h1>
+    <p class="hero-desc">BMW, Porsche, Mercedes, Ducati, Harley-Davidson — запишитесь на тест-драйв мечты прямо сейчас.</p>
+    <div class="hero-actions">
+      <a routerLink="/cars" class="btn btn-primary">Смотреть автомобили</a>
+      <a routerLink="/motorcycles" class="btn btn-secondary">Мотоциклы</a>
+    </div>
+  </div>
+  <div class="hero-overlay"></div>
+</section>
+
+<!-- STATS -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      @for (stat of stats; track stat.label) {
+        <div class="stat-item">
+          <div class="stat-value">{{ stat.value }}</div>
+          <div class="stat-label">{{ stat.label }}</div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- BRANDS -->
+<section class="page section">
+  <div class="section-title">Наши бренды</div>
+  <div class="gold-line"></div>
+  <div class="brands-grid">
+    @for (brand of brands; track brand.name) {
+      <button class="brand-card" (click)="goToBrand(brand)">
+        <img [src]="brand.img" [alt]="brand.name" class="brand-img">
+        <span class="brand-name">{{ brand.name }}</span>
+      </button>
+    }
+  </div>
+</section>
+
+<!-- FEATURED -->
+<section class="page section">
+  <div class="section-title">Избранные модели</div>
+  <p class="section-subtitle">Наш премиальный каталог — выберите идеальный тест-драйв</p>
+  <div class="gold-line"></div>
+
+  <div class="vehicles-grid">
+    @if (isLoading) {
+      @for (sk of skeletons; track $index) {
+        <app-skeleton-card></app-skeleton-card>
+      }
+    } @else if (featured.length === 0) {
+      <div class="empty-state" style="grid-column:1/-1">
+        <div class="empty-state-icon">🚗</div>
+        <h3>Каталог пуст</h3>
+        <p>Проверьте соединение с сервером</p>
+      </div>
+    } @else {
+      @for (vehicle of featured; track vehicle.id) {
+        <app-vehicle-card [vehicle]="vehicle"></app-vehicle-card>
+      }
+    }
+  </div>
+
+  @if (!isLoading && featured.length > 0) {
+    <div style="text-align:center; margin-top:40px;">
+      <a routerLink="/cars" class="btn btn-secondary">Весь каталог автомобилей →</a>
+    </div>
+  }
+</section>
+
+<!-- CTA BANNER -->
+<section class="cta-banner">
+  <div class="cta-content">
+    <h2>Готовы к незабываемому<br><span class="gold">тест-драйву?</span></h2>
+    <p>Зарегистрируйтесь и получите доступ к полному каталогу</p>
+    <button class="btn btn-primary" (click)="onStartClick()">Начать сейчас</button>
+  </div>
+</section>

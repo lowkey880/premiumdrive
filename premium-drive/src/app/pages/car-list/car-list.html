@@ -1,0 +1,59 @@
+<!-- HERO -->
+<div class="page-hero">
+  <h1>Премиальные <span class="gold">Автомобили</span></h1>
+  <p>Тест-драйв BMW, Porsche и Mercedes — выберите свою модель мечты</p>
+</div>
+
+<div class="page">
+  <!-- FILTER -->
+  <div class="filter-bar">
+    @for (brand of brands; track brand) {
+      <button
+        class="filter-btn"
+        [class.active]="selectedBrand === brand"
+        (click)="filterByBrand(brand)"
+      >
+        {{ brand }}
+      </button>
+    }
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-bar">
+    <input
+      class="search-input"
+      [(ngModel)]="searchQuery"
+      placeholder="Поиск по названию или бренду..."
+      type="text"
+    />
+  </div>
+
+  <!-- RESULTS COUNT -->
+  @if (!isLoading) {
+    <p class="results-count">
+      Найдено: <strong>{{ vehicles.length }}</strong> {{ vehicles.length === 1 ? 'автомобиль' : 'автомобилей' }}
+    </p>
+  }
+
+  <!-- GRID -->
+  <div class="vehicles-grid">
+    @if (isLoading) {
+      @for (sk of skeletons; track $index) {
+        <app-skeleton-card></app-skeleton-card>
+      }
+    } @else if (vehicles.length === 0) {
+      <div class="empty-state" style="grid-column:1/-1">
+        <div class="empty-state-icon">🔍</div>
+        <h3>Ничего не найдено</h3>
+        <p>Попробуйте изменить поисковый запрос или выбрать другой бренд</p>
+        <button class="btn btn-secondary" (click)="filterByBrand('Все')">
+          Показать все
+        </button>
+      </div>
+    } @else {
+      @for (vehicle of vehicles; track vehicle.id) {
+        <app-vehicle-card [vehicle]="vehicle"></app-vehicle-card>
+      }
+    }
+  </div>
+</div>

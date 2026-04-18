@@ -1,0 +1,35 @@
+<div class="vehicle-card" (click)="openDetail()">
+  <div class="card-image-wrap">
+    <img
+      [src]="vehicle.image || 'https://placehold.co/400x240/1a1a1a/c9a84c?text=' + vehicle.brand"
+      [alt]="vehicle.name"
+      class="card-image"
+      loading="lazy"
+    />
+    <div class="card-type-badge">{{ vehicle.type }}</div>
+    <button
+      class="fav-btn"
+      [class.active]="isFavorite"
+      (click)="$event.stopPropagation(); toggleFavorite()"
+      [attr.aria-label]="isFavorite ? 'Убрать из избранного' : 'Добавить в избранное'"
+    >
+      {{ isFavorite ? '♥' : '♡' }}
+    </button>
+  </div>
+
+  <div class="card-body">
+    <div class="card-brand">{{ vehicle.brand }}</div>
+    <h3 class="card-name">{{ vehicle.name }}</h3>
+
+    @if (vehicle.year) {
+      <div class="card-year">{{ vehicle.year }} г.</div>
+    }
+
+    <div class="card-price">{{ formatPrice(vehicle.price) }}</div>
+
+    <div class="card-actions" (click)="$event.stopPropagation()">
+      <button class="btn-detail" (click)="openDetail()">Подробнее</button>
+      <button class="btn-order" (click)="quickOrder()">Записаться</button>
+    </div>
+  </div>
+</div>

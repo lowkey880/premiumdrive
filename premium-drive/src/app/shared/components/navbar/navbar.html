@@ -1,0 +1,36 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <a routerLink="/" class="logo" (click)="closeMenu()">
+      Premium<span>Drive</span>
+    </a>
+
+    <button class="hamburger" (click)="toggleMenu()" [class.open]="menuOpen" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="nav-links" [class.open]="menuOpen">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">Главная</a>
+      <a routerLink="/cars" routerLinkActive="active" (click)="closeMenu()">Автомобили</a>
+      <a routerLink="/motorcycles" routerLinkActive="active" (click)="closeMenu()">Мотоциклы</a>
+
+      @if (isLoggedIn) {
+        <a routerLink="/favorites" routerLinkActive="active" (click)="closeMenu()" class="fav-link">
+          ♥ Избранное
+          @if (favCount > 0) {
+            <span class="badge">{{ favCount }}</span>
+          }
+        </a>
+        <a routerLink="/orders" routerLinkActive="active" (click)="closeMenu()">Заявки</a>
+        <a routerLink="/profile" routerLinkActive="active" (click)="closeMenu()" class="user-link">
+          👤
+           {{ username }}
+        </a>
+        <button class="btn-logout" (click)="logout()">Выйти</button>
+      } @else {
+        <a routerLink="/login" routerLinkActive="active" (click)="closeMenu()" class="btn-login">Войти</a>
+      }
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,150 @@
+.vehicle-card {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.vehicle-card:hover {
+  transform: translateY(-6px);
+  border-color: #c9a84c;
+  box-shadow: 0 12px 40px rgba(201, 168, 76, 0.15);
+}
+
+.card-image-wrap {
+  position: relative;
+  overflow: hidden;
+  height: 200px;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.vehicle-card:hover .card-image {
+  transform: scale(1.05);
+}
+
+.card-type-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(10, 10, 10, 0.75);
+  color: #c9a84c;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid rgba(201, 168, 76, 0.3);
+}
+
+.fav-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(10, 10, 10, 0.75);
+  border: 1px solid #3a3a3a;
+  color: #888;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.fav-btn:hover,
+.fav-btn.active {
+  color: #c9a84c;
+  border-color: #c9a84c;
+  background: rgba(201, 168, 76, 0.1);
+}
+
+.card-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.card-brand {
+  font-size: 0.75rem;
+  color: #c9a84c;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.card-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.card-year {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.card-price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #c9a84c;
+  margin-top: 4px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn-detail,
+.btn-order {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.btn-detail {
+  background: transparent;
+  border: 1px solid #3a3a3a;
+  color: #aaa;
+}
+
+.btn-detail:hover {
+  border-color: #c9a84c;
+  color: #c9a84c;
+}
+
+.btn-order {
+  background: #c9a84c;
+  border: 1px solid #c9a84c;
+  color: #0a0a0a;
+}
+
+.btn-order:hover {
+  background: #b8963d;
+  border-color: #b8963d;
+}

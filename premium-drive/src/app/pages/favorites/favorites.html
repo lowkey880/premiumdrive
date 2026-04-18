@@ -1,0 +1,48 @@
+<div class="page-hero">
+  <h1>Избранное <span class="gold">♥</span></h1>
+  <p>Сохранённые автомобили и мотоциклы</p>
+</div>
+
+<div class="page">
+
+  @if (vehicles.length === 0) {
+    <div class="empty-state">
+      <div class="empty-state-icon">♡</div>
+      <h3>Избранное пусто</h3>
+      <p>Добавляйте автомобили нажав ♡ на карточке</p>
+      <a routerLink="/cars" class="btn btn-primary" style="margin-top:8px">
+        Смотреть каталог
+      </a>
+    </div>
+  } @else {
+
+    <!-- SUMMARY BAR -->
+    <div class="summary-bar">
+      <div class="summary-item">
+        <span class="summary-label">Моделей</span>
+        <span class="summary-value">{{ vehicles.length }}</span>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-item">
+        <span class="summary-label">Общая стоимость</span>
+        <span class="summary-value gold">{{ formatPrice(totalPrice) }}</span>
+      </div>
+      <button class="btn-clear" (click)="clearAll()">
+        ✕ Очистить всё
+      </button>
+    </div>
+
+    <!-- GRID -->
+    <div class="vehicles-grid">
+      @for (vehicle of vehicles; track vehicle.id) {
+        <div class="fav-item">
+          <app-vehicle-card [vehicle]="vehicle"></app-vehicle-card>
+          <button class="remove-btn" (click)="remove(vehicle)">
+            ✕ Убрать из избранного
+          </button>
+        </div>
+      }
+    </div>
+  }
+
+</div>
