@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Vehicle, Category } from '../../shared/interfaces/models';
+import { Vehicle } from '../../shared/interfaces/models';
 
 const API = 'http://127.0.0.1:8000';
 
@@ -21,7 +21,4 @@ export class VehicleService {
     return this.http.get<Vehicle>(`${API}/api/vehicles/${id}/`);
   }
 
-  getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(`${API}/api/categories/`);
-  }
 }

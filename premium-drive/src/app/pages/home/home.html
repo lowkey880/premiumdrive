@@ -27,13 +27,12 @@
 </section>
 
 <!-- BRANDS -->
-<section class="page section">
+<section class="page section" style="padding-bottom:0;margin-bottom:24px">
   <div class="section-title">Наши бренды</div>
   <div class="gold-line"></div>
   <div class="brands-grid">
     @for (brand of brands; track brand.name) {
       <button class="brand-card" (click)="goToBrand(brand)">
-        <img [src]="brand.img" [alt]="brand.name" class="brand-img">
         <span class="brand-name">{{ brand.name }}</span>
       </button>
     }

@@ -18,56 +18,6 @@
 
   <div class="page">
 
-    <!-- ACTIONS BAR -->
-    <div class="actions-bar">
-      @if (isLoggedIn) {
-        <button class="btn btn-primary" (click)="toggleOrderForm()">
-          {{ showOrderForm ? '✕ Закрыть форму' : '📋 Записаться на тест-драйв' }}
-        </button>
-      } @else {
-        <a routerLink="/login" class="btn btn-primary">🔐 Войдите для записи</a>
-      }
-      <button class="btn btn-secondary" [class.fav-active]="isFavorite" (click)="toggleFavorite()">
-        {{ isFavorite ? '♥ В избранном' : '♡ В избранное' }}
-      </button>
-      @if (isLoggedIn) {
-        <button class="btn btn-ghost" (click)="toggleReviewForm()">
-          {{ showReviewForm ? '✕ Отмена' : '✍️ Написать отзыв' }}
-        </button>
-      }
-    </div>
-
-    <!-- ORDER FORM — 4 [(ngModel)] поля -->
-    @if (showOrderForm) {
-      <div class="form-card">
-        <h3 class="form-card-title">Заявка на тест-драйв — {{ vehicle.name }}</h3>
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label">Ваше имя *</label>
-            <input class="form-input" [(ngModel)]="orderForm.fullName"
-                   placeholder="Арман Арманов" type="text" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Телефон *</label>
-            <input class="form-input" [(ngModel)]="orderForm.phone"
-                   placeholder="+7 (777) 000-00-00" type="tel" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Желаемая дата *</label>
-            <input class="form-input" [(ngModel)]="orderForm.date" type="date" />
-          </div>
-          <div class="form-group" style="grid-column:1/-1">
-            <label class="form-label">Комментарий</label>
-            <textarea class="form-textarea" [(ngModel)]="orderForm.comment"
-                      placeholder="Пожелания, вопросы по комплектации..."></textarea>
-          </div>
-        </div>
-        <button class="btn btn-primary" (click)="submitOrder()" [disabled]="orderSubmitting">
-          {{ orderSubmitting ? 'Отправка...' : 'Отправить заявку' }}
-        </button>
-      </div>
-    }
-
     <!-- SPECS -->
     <div class="specs-grid">
       <div class="spec-card">
@@ -102,10 +52,112 @@
       }
     </div>
 
+    <!-- DESCRIPTION -->
     @if (vehicle.description) {
       <div class="description-block">
         <h3>Описание</h3>
         <p>{{ vehicle.description }}</p>
+      </div>
+    }
+
+    <!-- ACTIONS BAR -->
+    <div class="actions-bar">
+      @if (isLoggedIn) {
+        <button class="btn btn-primary" (click)="toggleOrderForm()">
+          {{ showOrderForm ? '✕ Закрыть форму' : '📋 Записаться на тест-драйв' }}
+        </button>
+      } @else {
+        <a routerLink="/login" class="btn btn-primary">🔐 Войдите для записи</a>
+      }
+      <button class="btn btn-buy" [class.btn-purchased]="isPurchased" (click)="openPurchaseForm()" [disabled]="isPurchased">
+        {{ isPurchased ? '✓ Куплено' : '💳 Купить' }}
+      </button>
+      <button class="btn btn-secondary" [class.fav-active]="isFavorite" (click)="toggleFavorite()">
+        {{ isFavorite ? '♥ В избранном' : '♡ В избранное' }}
+      </button>
+    </div>
+
+    <!-- ORDER FORM -->
+    @if (showOrderForm) {
+      <div class="form-card">
+        <h3 class="form-card-title">Заявка на тест-драйв — {{ vehicle.name }}</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Ваше имя *</label>
+            <input class="form-input" [(ngModel)]="orderForm.fullName"
+                   placeholder="Арман Арманов" type="text" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Телефон *</label>
+            <input class="form-input" [(ngModel)]="orderForm.phone"
+                   placeholder="+7 (777) 000-00-00" type="tel" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Желаемая дата *</label>
+            <input class="form-input" [(ngModel)]="orderForm.date" type="date" />
+          </div>
+          <div class="form-group" style="grid-column:1/-1">
+            <label class="form-label">Комментарий</label>
+            <textarea class="form-textarea" [(ngModel)]="orderForm.comment"
+                      placeholder="Пожелания, вопросы по комплектации..."></textarea>
+          </div>
+        </div>
+        <button class="btn btn-primary" (click)="submitOrder()" [disabled]="orderSubmitting">
+          {{ orderSubmitting ? 'Отправка...' : 'Отправить заявку' }}
+        </button>
+      </div>
+    }
+
+    <!-- PURCHASE FORM -->
+    @if (showPurchaseForm) {
+      <div class="form-card purchase-form-card">
+        <h3 class="form-card-title">Покупка — {{ vehicle.name }}</h3>
+        <div class="price-summary">
+          <span class="purchase-price-line">Цена: <span class="gold">{{ formatPrice(vehicle.price) }}</span></span>
+          @if (promoApplied) {
+            <span class="promo-applied-line">Скидка {{ promoDiscount }}%: <span class="gold">{{ formatPrice(finalPrice) }}</span></span>
+          }
+        </div>
+
+        <div class="form-group" style="margin-top:20px">
+          <label class="form-label">Промокод</label>
+          <div class="promo-row">
+            <input class="form-input" [(ngModel)]="promoCode"
+                   placeholder="Введите промокод"
+                   [disabled]="promoApplied"
+                   style="text-transform:uppercase" />
+            <button class="btn btn-secondary promo-btn" (click)="applyPromo()" [disabled]="promoApplied || !promoCode">
+              {{ promoApplied ? '✓' : 'Применить' }}
+            </button>
+          </div>
+          @if (promoError) {
+            <span class="purchase-error">{{ promoError }}</span>
+          }
+          @if (promoApplied) {
+            <span class="promo-success">Промокод KBTU применён — скидка {{ promoDiscount }}%</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Номер карты (12 цифр)</label>
+          <input
+            class="form-input card-input"
+            [value]="cardNumber"
+            (input)="formatCard($any($event.target).value)"
+            placeholder="1234 5678 9012"
+            inputmode="numeric"
+            maxlength="14" />
+          @if (purchaseError) {
+            <span class="purchase-error">{{ purchaseError }}</span>
+          }
+        </div>
+
+        <div class="purchase-actions">
+          <button class="btn btn-primary" (click)="onPurchase()" [disabled]="isPurchasing">
+            {{ isPurchasing ? 'Обработка...' : '💳 Оплатить ' + formatPrice(finalPrice) }}
+          </button>
+          <button class="btn btn-ghost" (click)="showPurchaseForm = false">Отмена</button>
+        </div>
       </div>
     }
 
@@ -116,8 +168,37 @@
       <h2 class="section-title">Отзывы</h2>
       <div class="gold-line"></div>
 
+      @if (reviews.length > 0) {
+        <div class="reviews-list">
+          @for (review of reviews; track review.id) {
+            <div class="review-card">
+              <div class="review-header">
+                <span class="review-stars">{{ ratingStars(review.rating) }}</span>
+                <span class="review-author">{{ review.username || 'Пользователь' }}</span>
+                <span class="review-date">{{ review.created_at | slice:0:10 }}</span>
+              </div>
+              <p class="review-text">{{ review.text }}</p>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-state">
+          <div class="empty-state-icon">💬</div>
+          <h3>Отзывов пока нет</h3>
+          @if (!isLoggedIn) {
+            <p><a routerLink="/login" class="gold-link">Войдите</a>, чтобы оставить отзыв</p>
+          }
+        </div>
+      }
+
+      @if (isLoggedIn && !showReviewForm) {
+        <button class="btn btn-ghost" style="margin-top:16px" (click)="showReviewForm = true">
+          ✍️ Написать отзыв
+        </button>
+      }
+
       @if (isLoggedIn && showReviewForm) {
-        <div class="form-card">
+        <div class="form-card" style="margin-top:24px">
           <h3 class="form-card-title">Ваш отзыв о {{ vehicle.name }}</h3>
           <div class="form-group">
             <label class="form-label">Оценка *</label>
@@ -132,33 +213,12 @@
             <textarea class="form-textarea" [(ngModel)]="reviewForm.text"
                       placeholder="Поделитесь впечатлениями от тест-драйва..."></textarea>
           </div>
-          <button class="btn btn-primary" (click)="submitReview()" [disabled]="reviewSubmitting">
-            {{ reviewSubmitting ? 'Публикация...' : 'Опубликовать отзыв' }}
-          </button>
-        </div>
-      }
-
-      @if (reviews.length === 0) {
-        <div class="empty-state">
-          <div class="empty-state-icon">💬</div>
-          <h3>Отзывов пока нет</h3>
-          @if (isLoggedIn) {
-            <p>Станьте первым — нажмите «Написать отзыв»</p>
-          } @else {
-            <p><a routerLink="/login" class="gold-link">Войдите</a>, чтобы оставить отзыв</p>
-          }
-        </div>
-      } @else {
-        <div class="reviews-list">
-          @for (review of reviews; track review.id) {
-            <div class="review-card">
-              <div class="review-header">
-                <span class="review-stars">{{ ratingStars(review.rating) }}</span>
-                <span class="review-date">{{ review.created_at | slice:0:10 }}</span>
-              </div>
-              <p class="review-text">{{ review.text }}</p>
-            </div>
-          }
+          <div style="display:flex;gap:12px">
+            <button class="btn btn-primary" (click)="submitReview()" [disabled]="reviewSubmitting">
+              {{ reviewSubmitting ? 'Публикация...' : 'Опубликовать отзыв' }}
+            </button>
+            <button class="btn btn-ghost" (click)="showReviewForm = false">Отмена</button>
+          </div>
         </div>
       }
     </div>

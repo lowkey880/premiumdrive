@@ -29,6 +29,10 @@ export interface Order {
   date: string | null;
   comment: string;
   status: OrderStatus;
+  is_purchased?: boolean;
+  purchase_price?: string | null;
+  card_last4?: string;
+  purchased_at?: string | null;
   created_at: string;
 }
 
@@ -48,6 +52,7 @@ export interface Review {
   text: string;
   rating: number;
   created_at: string;
+  username?: string;
 }
 
 export interface ReviewCreatePayload {

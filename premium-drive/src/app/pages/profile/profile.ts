@@ -55,14 +55,18 @@ export class Profile implements OnInit {
   }
 
   get recentOrders(): Order[] {
-    return this.allOrders.slice(0, 3);
+    return this.allOrders.filter(o => !o.is_purchased).slice(0, 3);
+  }
+
+  get purchasedOrders(): Order[] {
+    return this.allOrders.filter(o => o.is_purchased);
   }
 
   get vip(): { label: string; color: string } {
-    const n = this.allOrders.length;
-    if (n >= 10) return { label: 'Gold',   color: '#c9a84c' };
-    if (n >= 3)  return { label: 'Silver', color: '#a8a8a8' };
-    return              { label: 'Bronze', color: '#cd7f32' };
+    const purchased = this.allOrders.filter(o => o.is_purchased === true).length;
+    if (purchased >= 5) return { label: 'Gold',   color: '#c9a84c' };
+    if (purchased >= 2) return { label: 'Silver', color: '#a8a8a8' };
+    return                     { label: 'Bronze', color: '#cd7f32' };
   }
 
   logout(): void {

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Vehicle } from '../../interfaces/models';
 import { FavoritesService } from '../../../core/services/favorites.service';
@@ -13,8 +13,6 @@ import { ToastService } from '../../../core/services/toast.service';
 })
 export class VehicleCard {
   @Input() vehicle!: Vehicle;
-  @Output() favoriteChanged = new EventEmitter<Vehicle>();
-
   constructor(
     private favorites: FavoritesService,
     private auth: AuthService,
@@ -30,7 +28,6 @@ export class VehicleCard {
     this.favorites.toggle(this.vehicle);
     const msg = this.isFavorite ? 'Добавлено в избранное' : 'Удалено из избранного';
     this.toast.success(msg);
-    this.favoriteChanged.emit(this.vehicle);
   }
 
   openDetail(): void {

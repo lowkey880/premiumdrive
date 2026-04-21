@@ -38,21 +38,21 @@ export class CarList implements OnInit {
     this.isLoading = true;
     this.searchQuery = '';
     const brand = this.selectedBrand !== 'Все' ? this.selectedBrand : undefined;
-    console.log('[CarList] Loading vehicles, brand filter:', brand);
-    this.vehicleService.getAll({ brand }).subscribe({
+    this.vehicleService.getAll({ type: 'car', brand }).subscribe({
       next: data => {
-        console.log('[CarList] Got data:', data);
         this.allVehicles = data;
         this.isLoading = false;
         this.cdr.detectChanges();
       },
-      error: err => {
-        console.log('[CarList] Error:', err);
+      error: () => {
         this.toast.error('Ошибка загрузки автомобилей');
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
     });
   }
+
+  sortOrder: 'none' | 'asc' | 'desc' = 'none';
 
   get vehicles(): Vehicle[] {
     const q = this.searchQuery.trim().toLowerCase();
@@ -60,6 +60,17 @@ export class CarList implements OnInit {
     return this.allVehicles.filter(v =>
       v.name.toLowerCase().includes(q) || v.brand.toLowerCase().includes(q)
     );
+  }
+
+  get sortedVehicles(): Vehicle[] {
+    const result = this.vehicles;
+    if (this.sortOrder === 'asc') return [...result].sort((a, b) => a.price - b.price);
+    if (this.sortOrder === 'desc') return [...result].sort((a, b) => b.price - a.price);
+    return result;
+  }
+
+  setSortOrder(order: 'asc' | 'desc' | 'none'): void {
+    this.sortOrder = order;
   }
 
   filterByBrand(brand: string): void {

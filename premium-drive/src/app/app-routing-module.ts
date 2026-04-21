@@ -8,6 +8,7 @@ import { Favorites } from './pages/favorites/favorites';
 import { Orders } from './pages/orders/orders';
 import { Profile } from './pages/profile/profile';
 import { Login } from './pages/login/login';
+import { Register } from './pages/register/register';
 import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'orders', component: Orders, canActivate: [AuthGuard] },
   { path: 'profile', component: Profile, canActivate: [AuthGuard] },
   { path: 'login', component: Login },
+  { path: 'register', component: Register },
   { path: '**', redirectTo: '' }
 ];
 

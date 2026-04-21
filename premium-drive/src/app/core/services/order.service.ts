@@ -20,4 +20,14 @@ export class OrderService {
   cancelOrder(id: number): Observable<Order> {
     return this.http.patch<Order>(`${API}/api/orders/${id}/`, { status: 'cancelled' });
   }
+
+  purchaseVehicle(data: {
+    card_number: string;
+    vehicle_id: number;
+    car_name: string;
+    purchase_price: number;
+    promo_code?: string;
+  }): Observable<{ success: boolean; message: string; card_last4: string; order_id: number }> {
+    return this.http.post<any>(`${API}/api/orders/purchase/`, data);
+  }
 }

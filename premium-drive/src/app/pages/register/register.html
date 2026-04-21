@@ -1,0 +1,73 @@
+<div class="login-page">
+  <div class="login-card">
+
+    <div class="login-logo">
+      Premium<span>Drive</span>
+    </div>
+    <h1 class="login-title">Регистрация</h1>
+    <p class="login-sub">Создайте аккаунт для записи на тест-драйв</p>
+
+    @if (errorMessage) {
+      <div class="alert-error">⚠️ {{ errorMessage }}</div>
+    }
+
+    <div class="form-group">
+      <label class="form-label">Имя пользователя *</label>
+      <input
+        class="form-input"
+        [(ngModel)]="form.username"
+        placeholder="username"
+        type="text"
+        autocomplete="username"
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input
+        class="form-input"
+        [(ngModel)]="form.email"
+        placeholder="email@example.com"
+        type="email"
+        autocomplete="email"
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Пароль *</label>
+      <input
+        class="form-input"
+        [(ngModel)]="form.password"
+        placeholder="••••••••"
+        type="password"
+        autocomplete="new-password"
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Повторите пароль *</label>
+      <input
+        class="form-input"
+        [(ngModel)]="form.password2"
+        placeholder="••••••••"
+        type="password"
+        autocomplete="new-password"
+        (keydown.enter)="onRegister()"
+      />
+    </div>
+
+    <button
+      class="btn btn-primary login-btn"
+      (click)="onRegister()"
+      [disabled]="isLoading"
+    >
+      {{ isLoading ? 'Регистрация...' : 'Зарегистрироваться' }}
+    </button>
+
+    <p class="login-hint">
+      Уже есть аккаунт?
+      <a routerLink="/login" class="gold-link">Войти</a>
+    </p>
+
+  </div>
+</div>

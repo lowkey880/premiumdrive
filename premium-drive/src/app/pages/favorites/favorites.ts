@@ -29,7 +29,7 @@ export class Favorites implements OnInit {
   }
 
   get totalPrice(): number {
-    return this.vehicles.reduce((sum, v) => sum + v.price, 0);
+    return this.vehicles.reduce((sum, v) => sum + Number(v.price), 0);
   }
 
   formatPrice(price: number): string {

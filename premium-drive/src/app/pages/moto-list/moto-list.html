@@ -18,6 +18,14 @@
     }
   </div>
 
+  <!-- SORT -->
+  <div class="sort-buttons">
+    <span class="sort-label">Цена:</span>
+    <button class="sort-btn" [class.active]="sortOrder === 'asc'" (click)="setSortOrder('asc')"> По возрастанию</button>
+    <button class="sort-btn" [class.active]="sortOrder === 'desc'" (click)="setSortOrder('desc')"> По убыванию</button>
+    <button class="sort-btn" [class.active]="sortOrder === 'none'" (click)="setSortOrder('none')">По умолчанию</button>
+  </div>
+
   <!-- SEARCH -->
   <div class="search-bar">
     <input
@@ -51,7 +59,7 @@
         </button>
       </div>
     } @else {
-      @for (vehicle of vehicles; track vehicle.id) {
+      @for (vehicle of sortedVehicles; track vehicle.id) {
         <app-vehicle-card [vehicle]="vehicle"></app-vehicle-card>
       }
     }

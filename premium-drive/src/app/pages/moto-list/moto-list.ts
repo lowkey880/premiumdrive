@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { VehicleService } from '../../core/services/vehicle.service';
 import { ToastService } from '../../core/services/toast.service';
@@ -22,7 +22,8 @@ export class MotoList implements OnInit {
   constructor(
     private vehicleService: VehicleService,
     private toast: ToastService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -37,17 +38,21 @@ export class MotoList implements OnInit {
     this.isLoading = true;
     this.searchQuery = '';
     const brand = this.selectedBrand !== 'Все' ? this.selectedBrand : undefined;
-    this.vehicleService.getAll({ brand }).subscribe({
+    this.vehicleService.getAll({ type: 'motorcycle', brand }).subscribe({
       next: data => {
         this.allVehicles = data;
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.toast.error('Ошибка загрузки мотоциклов');
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
     });
   }
+
+  sortOrder: 'none' | 'asc' | 'desc' = 'none';
 
   get vehicles(): Vehicle[] {
     const q = this.searchQuery.trim().toLowerCase();
@@ -55,6 +60,17 @@ export class MotoList implements OnInit {
     return this.allVehicles.filter(v =>
       v.name.toLowerCase().includes(q) || v.brand.toLowerCase().includes(q)
     );
+  }
+
+  get sortedVehicles(): Vehicle[] {
+    const result = this.vehicles;
+    if (this.sortOrder === 'asc') return [...result].sort((a, b) => a.price - b.price);
+    if (this.sortOrder === 'desc') return [...result].sort((a, b) => b.price - a.price);
+    return result;
+  }
+
+  setSortOrder(order: 'asc' | 'desc' | 'none'): void {
+    this.sortOrder = order;
   }
 
   filterByBrand(brand: string): void {

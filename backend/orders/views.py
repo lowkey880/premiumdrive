@@ -2,6 +2,7 @@ from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.utils import timezone
 
 from .models import Order, Review
 from .serializers import OrderSerializer, ReviewSerializer
@@ -45,7 +46,11 @@ class OrderCancelView(APIView):
 
 class ReviewListCreateView(generics.ListCreateAPIView):
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticated]
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return []
+        return [IsAuthenticated()]
 
     def get_queryset(self):
         qs = Review.objects.all()
@@ -56,3 +61,49 @@ class ReviewListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+VALID_PROMO_CODES = {
+    'KBTU': 20,
+}
+
+
+class PurchaseVehicleView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk=None):
+        card_number = str(request.data.get('card_number', ''))
+        vehicle_id = request.data.get('vehicle_id')
+        car_name = request.data.get('car_name', '')
+        purchase_price = request.data.get('purchase_price')
+        promo_code = str(request.data.get('promo_code', '')).upper()
+
+        if len(card_number) != 12:
+            return Response(
+                {'error': 'Номер карты должен содержать 12 цифр'},
+                status=400
+            )
+
+        if promo_code and promo_code not in VALID_PROMO_CODES:
+            return Response(
+                {'error': 'Неверный промокод'},
+                status=400
+            )
+
+        order = Order.objects.create(
+            user=request.user,
+            car_name=car_name,
+            vehicle_id=vehicle_id,
+            is_purchased=True,
+            purchase_price=purchase_price,
+            card_last4=card_number[-4:],
+            status='completed',
+            purchased_at=timezone.now()
+        )
+
+        return Response({
+            'success': True,
+            'message': 'Покупка успешна!',
+            'card_last4': card_number[-4:],
+            'order_id': order.id
+        })

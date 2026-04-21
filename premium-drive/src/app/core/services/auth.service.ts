@@ -8,6 +8,7 @@ import { AuthResponse } from '../../shared/interfaces/models';
 const API = 'http://127.0.0.1:8000';
 const TOKEN_KEY = 'pd_token';
 const REFRESH_KEY = 'pd_refresh';
+const USERNAME_KEY = 'pd_username';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -21,6 +22,7 @@ export class AuthService {
       tap(res => {
         localStorage.setItem(TOKEN_KEY, res.access);
         localStorage.setItem(REFRESH_KEY, res.refresh);
+        localStorage.setItem(USERNAME_KEY, username);
         this.loggedIn$.next(true);
         this.router.navigateByUrl(returnUrl);
       })
@@ -34,6 +36,7 @@ export class AuthService {
     }
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(REFRESH_KEY);
+    localStorage.removeItem(USERNAME_KEY);
     this.loggedIn$.next(false);
     this.router.navigate(['/login']);
   }
@@ -47,20 +50,7 @@ export class AuthService {
   }
 
   getUsername(): string {
-    const token = this.getToken();
-    if (!token) return '';
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.username || payload.user_id?.toString() || 'User';
-    } catch {
-      return 'User';
-    }
+    return localStorage.getItem(USERNAME_KEY) || 'User';
   }
 
-  // VIP статус считается локально по сумме цен избранных авто
-  getVipStatus(totalPrice: number): { label: string; color: string } {
-    if (totalPrice >= 200_000) return { label: 'Gold', color: '#c9a84c' };
-    if (totalPrice >= 50_000) return { label: 'Silver', color: '#a8a8a8' };
-    return { label: 'Bronze', color: '#cd7f32' };
-  }
 }

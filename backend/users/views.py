@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -52,3 +53,22 @@ def logout_view(request):
         )
 
     return Response({'message': 'Successfully logged out.'})
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def register_view(request):
+    username = request.data.get('username', '').strip()
+    email = request.data.get('email', '').strip()
+    password = request.data.get('password', '')
+    password2 = request.data.get('password2', '')
+
+    if not username or not password:
+        return Response({'error': 'Заполните все поля'}, status=400)
+    if password != password2:
+        return Response({'error': 'Пароли не совпадают'}, status=400)
+    if User.objects.filter(username=username).exists():
+        return Response({'error': 'Пользователь с таким именем уже существует'}, status=400)
+
+    User.objects.create_user(username=username, email=email, password=password)
+    return Response({'message': 'Регистрация успешна'}, status=201)

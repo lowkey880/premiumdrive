@@ -16,11 +16,11 @@ import { Home } from './pages/home/home';
 import { CarList } from './pages/car-list/car-list';
 import { MotoList } from './pages/moto-list/moto-list';
 import { VehicleDetail } from './pages/vehicle-detail/vehicle-detail';
-import { Compare } from './pages/compare/compare';
 import { Favorites } from './pages/favorites/favorites';
 import { Orders } from './pages/orders/orders';
 import { Profile } from './pages/profile/profile';
 import { Login } from './pages/login/login';
+import { Register } from './pages/register/register';
 
 @NgModule({
   declarations: [
@@ -34,11 +34,11 @@ import { Login } from './pages/login/login';
     CarList,
     MotoList,
     VehicleDetail,
-    Compare,
     Favorites,
     Orders,
     Profile,
     Login,
+    Register,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [

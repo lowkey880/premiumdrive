@@ -17,18 +17,18 @@ export class Home implements OnInit {
   skeletons = Array(6);
 
   stats = [
-    { value: '50+',  label: 'Премиальных авто' },
+    { value: '25+',  label: 'Премиальных авто' },
     { value: '500+', label: 'Довольных клиентов' },
     { value: '5',    label: 'Брендов' },
     { value: '100%', label: 'Незабываемых впечатлений' },
   ];
 
   brands = [
-    { name: 'BMW',             img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/BMW.svg/600px-BMW.svg.png',              route: '/cars',        query: 'BMW' },
-    { name: 'Porsche',         img: 'https://upload.wikimedia.org/wikipedia/de/thumb/5/5c/Porsche_Logo.svg/800px-Porsche_Logo.svg.png', route: '/cars',        query: 'Porsche' },
-    { name: 'Mercedes',        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Logo.svg/800px-Mercedes-Logo.svg.png', route: '/cars',  query: 'Mercedes' },
-    { name: 'Ducati',          img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ducati_logo.svg/800px-Ducati_logo.svg.png', route: '/motorcycles', query: 'Ducati' },
-    { name: 'Harley-Davidson', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Harley-Davidson_logo.svg/800px-Harley-Davidson_logo.svg.png', route: '/motorcycles', query: 'Harley-Davidson' },
+    { name: 'BMW',             img: 'https://cdn.worldvectorlogo.com/logos/bmw-2.svg',              w: 60, route: '/cars',        query: 'BMW' },
+    { name: 'Porsche',         img: 'https://cdn.worldvectorlogo.com/logos/porsche-2.svg',          w: 60, route: '/cars',        query: 'Porsche' },
+    { name: 'Mercedes',        img: 'https://cdn.worldvectorlogo.com/logos/mercedes-benz-9.svg',    w: 60, route: '/cars',        query: 'Mercedes' },
+    { name: 'Ducati',          img: 'https://cdn.worldvectorlogo.com/logos/ducati-4.svg',           w: 60, route: '/motorcycles', query: 'Ducati' },
+    { name: 'Harley-Davidson', img: 'https://cdn.worldvectorlogo.com/logos/harley-davidson-1.svg',  w: 80, route: '/motorcycles', query: 'Harley-Davidson' },
   ];
 
   constructor(
